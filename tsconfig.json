@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"lib": ["ES2022"],
+		"module": "Node16",
+		"moduleResolution": "node16",
+		"types": [],
+		"useDefineForClassFields": true,
+		"declaration": true,
+		"sourceMap": true,
+		"importHelpers": true,
+		"isolatedModules": true,
+		"strict": true,
+		"exactOptionalPropertyTypes": false,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"useUnknownInCatchVariables": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"incremental": true
+	},
+	"references": [{"path": "./tsconfig.vite.config.json"}]
+}

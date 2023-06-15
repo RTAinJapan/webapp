@@ -1,0 +1,77 @@
+{
+	"root": true,
+	"extends": ["eslint:recommended", "prettier"],
+	"plugins": ["import"],
+	"rules": {
+		"import/order": [
+			"error",
+			{
+				"newlines-between": "always",
+				"alphabetize": {"order": "asc"}
+			}
+		],
+		"import/first": "error",
+		"import/newline-after-import": "error"
+	},
+
+	"overrides": [
+		{
+			"files": ["./**/*.ts", "./**/*.tsx"],
+			"parser": "@typescript-eslint/parser",
+			"parserOptions": {
+				"project": "./tsconfig.json"
+			},
+			"extends": [
+				"plugin:@typescript-eslint/recommended",
+				"plugin:@typescript-eslint/recommended-requiring-type-checking",
+				"prettier"
+			],
+			"rules": {
+				"@typescript-eslint/consistent-type-imports": [
+					"error",
+					{"prefer": "type-imports", "fixStyle": "separate-type-imports"}
+				],
+				"@typescript-eslint/consistent-type-exports": "error",
+				"@typescript-eslint/no-unsafe-argument": "warn",
+				"@typescript-eslint/no-unsafe-assignment": "warn",
+				"@typescript-eslint/no-unsafe-call": "warn",
+				"@typescript-eslint/no-unsafe-member-access": "warn",
+				"@typescript-eslint/no-unsafe-return": "warn"
+			}
+		},
+		{
+			"files": ["./src/client/**/*"],
+			"parserOptions": {
+				"project": "./src/client/tsconfig.json"
+			},
+			"env": {
+				"browser": true
+			},
+			"extends": [
+				"plugin:react/recommended",
+				"plugin:react/jsx-runtime",
+				"plugin:react-hooks/recommended",
+				"plugin:storybook/recommended",
+				"prettier"
+			],
+			"rules": {
+				"react/no-unknown-property": "off"
+			}
+		},
+		{
+			"files": ["./src/server/**/*"],
+			"parserOptions": {
+				"project": "./src/server/tsconfig.json"
+			},
+			"env": {
+				"node": true
+			}
+		},
+		{
+			"files": ["./vite.config.ts"],
+			"parserOptions": {
+				"project": "./tsconfig.vite.config.json"
+			}
+		}
+	]
+}
