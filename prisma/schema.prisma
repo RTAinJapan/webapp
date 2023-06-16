@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  email       String   @unique
+  displayName String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  DiscordAccount  DiscordAccount?
+  TwitchAccount   TwitchAccount?
+  TwitterAccount  TwitterAccount?
+  NiconicoAccount NiconicoAccount?
+  YouTubeChannel  YouTubeChannel?
+  RubSubmission   RunSubmission[]
+}
+
+model DiscordAccount {
+  id        Int      @id @default(autoincrement())
+  discordId String   @unique
+  username  String
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TwitchAccount {
+  id        Int      @id @default(autoincrement())
+  twitchId  String   @unique
+  username  String
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TwitterAccount {
+  id        Int      @id @default(autoincrement())
+  twitterId String
+  username  String
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model NiconicoAccount {
+  id             Int      @id @default(autoincrement())
+  niconicoUserId String
+  communityId    String
+  userId         Int      @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model YouTubeChannel {
+  id        Int    @id @default(autoincrement())
+  channelId String @unique
+
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  name      String   @unique
+  shortName String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  RunSubmission RunSubmission[]
+}
+
+model Game {
+  id        Int      @id @default(autoincrement())
+  igdbId    Int      @unique
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  RunSubmission RunSubmission[]
+}
+
+model RunSubmission {
+  id          Int      @id @default(autoincrement())
+  description String
+  userId      Int
+  eventId     Int
+  gameId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  User                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Event                 Event                   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  Game                  Game                    @relation(fields: [gameId], references: [id])
+  RunSubmissionCategory RunSubmissionCategory[]
+}
+
+model RunSubmissionCategory {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  description     String
+  videoUrl        String
+  status          SubmissionStatus
+  runSubmissionId Int?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now())
+
+  RunSubmission RunSubmission? @relation(fields: [runSubmissionId], references: [id])
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
