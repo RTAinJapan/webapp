@@ -1,17 +1,34 @@
 import * as nodemailer from "nodemailer";
-import {z} from "zod";
 
-const EMAIL_HOST = z.string().email().parse(process.env["EMAIL_HOST"]);
-const EMAIL_USER = z.string().email().parse(process.env["EMAIL_USER"]);
-const EMAIL_PASS = z.string().email().parse(process.env["EMAIL_PASS"]);
+import {ENV} from "./constants.js";
 
-export const mailer = nodemailer.createTransport({
-	host: EMAIL_HOST,
+const NOREPLY_EMAIL = "noreply@rtain.jp";
+
+const mailer = nodemailer.createTransport({
+	host: ENV.EMAIL_HOST,
 	port: 9025,
 	secure: false,
 	auth: {
-		user: EMAIL_USER,
-		pass: EMAIL_PASS,
+		user: ENV.EMAIL_USER,
+		pass: ENV.EMAIL_PASS,
 	},
 	socketTimeout: 5000,
 });
+
+export const sendTokenEmail = async (email: string, token: number) => {
+	await mailer.sendMail({
+		from: NOREPLY_EMAIL,
+		to: email,
+		subject: "rtain.jp",
+		text: token.toString().padStart(6, "0"),
+	});
+};
+
+export const sendDuplicateEmailNotification = async (email: string) => {
+	await mailer.sendMail({
+		from: NOREPLY_EMAIL,
+		to: email,
+		subject: "Register attempt on rtaij.app",
+		text: "Someone tried to register on rtaij.app with your email, but your account already exists. If this was you, please sign in. If this was not you, please ignore this email.",
+	});
+};

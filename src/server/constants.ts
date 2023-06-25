@@ -1,26 +1,28 @@
+import * as process from "node:process";
+
 import {z} from "zod";
 
-export const SESSION_COOKIE_NAME = "rtaij-app-session-token";
+const envSchema = z.object({
+	DATABASE_URL: z.string().url(),
 
-export const CLIENT_ORIGIN = z
-	.string()
-	.url()
-	.parse(process.env["CLIENT_ORIGIN"]);
+	CLIENT_ORIGIN: z.string().url(),
 
-export const SERVER_ORIGIN = z
-	.string()
-	.url()
-	.parse(process.env["SERVER_ORIGIN"]);
+	SERVER_ORIGIN: z.string().url(),
+	SERVER_HOSTNAME: z.string(),
+	SERVER_PORT: z.coerce.number().positive().int(),
 
-export const SERVER_HOSTNAME = z.string().parse(process.env["SERVER_HOSTNAME"]);
+	SESSION_COOKIE_NAME: z.string(),
 
-export const SERVER_PORT = z.coerce
-	.number()
-	.positive()
-	.int()
-	.parse(process.env["SERVER_PORT"]);
+	EMAIL_HOST: z.string(),
+	EMAIL_USER: z.string(),
+	EMAIL_PASS: z.string(),
 
-export const NODE_ENV = z
-	.enum(["development", "production"])
-	.default("development")
-	.parse(process.env["NODE_ENV"]);
+	PASSKEY_RP_NAME: z.string(),
+	PASSKEY_RP_ID: z.string(),
+});
+
+export const ENV = await envSchema.parseAsync(process.env);
+
+export const EMAIL_TOKEN_MINIMUM = 0;
+export const EMAIL_TOKEN_MAXIMUM = 999999;
+export const EMAIL_TOKEN_VALID_DURATION = 5 * 60 * 1000;

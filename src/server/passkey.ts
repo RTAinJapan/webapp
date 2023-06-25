@@ -1,12 +1,10 @@
-import {z} from "zod";
+import {ENV} from "./constants.js";
 
-import {CLIENT_ORIGIN} from "./constants.js";
+export const rpName = ENV.PASSKEY_RP_NAME;
 
-export const rpName = z.string().parse(process.env["PASSKEY_RP_NAME"]);
+export const rpID = ENV.PASSKEY_RP_ID;
 
-export const rpID = z.string().parse(process.env["PASSKEY_RP_ID"]);
-
-export const origin = CLIENT_ORIGIN;
+export const origin = ENV.CLIENT_ORIGIN;
 
 export const normalizeBase64 = (base64: string) => {
 	return Buffer.from(base64, "base64").toString("base64");

@@ -17,10 +17,10 @@ export const ConfirmTokenInput = ({email, onSuccess}: Props) => {
 	const utils = trpc.useContext();
 
 	const {mutate, error, isError} =
-		trpc.auth.createUserWithEmailChallenge.useMutation({
+		trpc.registration.createUserWithEmailChallenge.useMutation({
 			onSuccess: () => {
 				onSuccess();
-				void utils.auth.validateSession.invalidate();
+				void utils.authorization.validateSession.invalidate();
 			},
 		});
 

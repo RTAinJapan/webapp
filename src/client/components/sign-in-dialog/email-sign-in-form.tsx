@@ -12,7 +12,6 @@ import {trpc} from "../../trpc";
 export const EmailSignInForm = () => {
 	const [inputEmail, setInputEmail] = useState("");
 	const locale = useLocale();
-	const [enableFetch, setEnableFetch] = useState(false);
 	const {mutateAsync: verifyPasskeyAuthentication} =
 		trpc.passkey.verifyAuthentication.useMutation();
 	const {closeDialog} = useDialogStore();
@@ -21,16 +20,11 @@ export const EmailSignInForm = () => {
 
 	const {
 		data: singInOption,
+		mutate: fetchSignInOption,
 		isSuccess,
 		error,
 		isError,
-	} = trpc.auth.emailSignInOptions.useQuery(
-		{email: inputEmail},
-		{
-			enabled: enableFetch,
-			retry: (_, error) => error.data?.code !== "NOT_FOUND",
-		}
-	);
+	} = trpc.authorization.emailSignInOptions.useMutation();
 
 	if (isSuccess) {
 		const authenticateWithPasskey = async () => {
@@ -38,20 +32,17 @@ export const EmailSignInForm = () => {
 				return;
 			}
 			try {
-				setEnableFetch(false);
 				const assertion = await startAuthentication(singInOption.options);
 				const result = await verifyPasskeyAuthentication({
 					email: inputEmail,
 					authenticationResponse: assertion,
 				});
 				if (result.verified) {
-					void utils.auth.validateSession.invalidate();
+					void utils.authorization.validateSession.invalidate();
 					closeDialog();
 				}
 			} catch (error) {
 				console.error(error);
-			} finally {
-				setEnableFetch(true);
 			}
 		};
 		return (
@@ -79,14 +70,13 @@ export const EmailSignInForm = () => {
 		<form
 			onSubmit={(event) => {
 				event.preventDefault();
-				setEnableFetch(true);
+				void fetchSignInOption({email: inputEmail});
 			}}
 			css={[blockStyle, {flexDirection: "column", gap: "8px"}]}
 		>
 			<TextField
 				type="email"
 				autoComplete="email webauthn"
-				disabled={enableFetch}
 				label={locale.email}
 				value={inputEmail}
 				error={isError}

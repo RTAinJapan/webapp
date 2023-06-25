@@ -15,7 +15,7 @@ export const EmailForm = ({onSubmit, onSuccess}: Props) => {
 	const [emailInput, setEmailInput] = useState("");
 
 	const {mutate: startEmailChallenge, isLoading} =
-		trpc.auth.startEmailChallenge.useMutation({
+		trpc.registration.startEmailChallenge.useMutation({
 			onMutate: () => {
 				onSubmit(emailInput);
 			},

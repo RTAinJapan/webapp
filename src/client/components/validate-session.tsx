@@ -5,7 +5,7 @@ import {useAuthStore} from "../stores/auth";
 import {trpc} from "../trpc";
 
 export const ValidateSession = ({children}: PropsWithChildren) => {
-	const {data, isSuccess} = trpc.auth.validateSession.useQuery();
+	const {data, isSuccess} = trpc.authorization.validateSession.useQuery();
 	const {setUser, setSignedIn} = useAuthStore();
 
 	useEffect(() => {

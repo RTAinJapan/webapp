@@ -13,7 +13,7 @@ export const Header = () => {
 	const {openRegisterDialog, openSingInDialog} = useDialogStore();
 	const {signedIn, setSignedIn} = useAuthStore();
 	const utils = trpc.useContext();
-	const {mutate: signOut} = trpc.auth.signOut.useMutation({
+	const {mutate: signOut} = trpc.authorization.signOut.useMutation({
 		onSuccess: () => {
 			void utils.invalidate();
 		},

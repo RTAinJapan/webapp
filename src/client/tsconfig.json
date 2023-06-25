@@ -10,5 +10,5 @@
 		"noEmit": true,
 		"jsxImportSource": "@emotion/react"
 	},
-	"include": ["./**/*.ts", "./**/*.tsx", "../util/**/*.ts"]
+	"include": ["../**/*.ts", "./**/*.tsx"]
 }

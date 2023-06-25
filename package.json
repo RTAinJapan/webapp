@@ -12,7 +12,6 @@
 		"dev": "run-p --race dev:*",
 		"dev:client": "vite",
 		"dev:client-types": "tsc -b src/client --watch --preserveWatchOutput",
-		"dev:storybook": "storybook dev",
 		"dev:server": "onchange build node_modules -ik -- npm start",
 		"dev:server-build": "tsc -b src/server --watch --preserveWatchOutput",
 		"dev:prisma": "prisma generate --watch",
@@ -48,12 +47,14 @@
 		"chromeandroid >= 114"
 	],
 	"dependencies": {
+		"@fastify/cors": "^8.3.0",
+		"@fastify/helmet": "^10.1.1",
 		"@prisma/client": "4.15.0",
 		"@simplewebauthn/server": "^7.3.1",
 		"@trpc/server": "^10.30.0",
 		"cookie": "^0.5.0",
-		"cors": "^2.8.5",
 		"dotenv": "^16.3.1",
+		"fastify": "^4.18.0",
 		"nodemailer": "^6.9.3",
 		"zod": "^3.21.4"
 	},
